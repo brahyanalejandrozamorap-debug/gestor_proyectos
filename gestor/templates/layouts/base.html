@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>{% block title %}Gestor de Proyectos{% endblock %}</title>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;800&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: { extend: { fontFamily: { sans: ['Inter', 'sans-serif'] } } }
+        }
+    </script>
+
+    {% block extra_head %}{% endblock %}
+</head>
+
+<body class="bg-neutral-100 font-sans text-neutral-900 min-h-screen"
+    style="--ancho: {% block ancho %}48rem{% endblock %};">
+
+    {% block body %}
+
+    <!-- HEADER OSCURO -->
+    <header class="bg-neutral-950 text-white">
+        <div class="max-w-[var(--ancho)] mx-auto px-6 pt-6 pb-16">
+
+            <!-- Fila: logo + menú -->
+            <div class="flex flex-wrap items-center justify-between gap-4">
+
+                <a href="{% url 'proyectos' %}" class="flex items-center gap-2 text-sm font-semibold tracking-wide">
+                    <span class="w-3 h-3 rounded-full bg-orange-500"></span>
+                    GESTOR DE CURSOS
+                </a>
+
+                <nav class="flex items-center gap-1 text-sm font-medium">
+
+                    <a href="{% url 'home' %}" class="px-4 py-2 rounded-full transition
+                               {% if request.resolver_match.url_name == 'home' %}
+                                   bg-orange-500 text-neutral-950 font-semibold
+                               {% else %}
+                                   text-neutral-300 hover:text-white hover:bg-neutral-800
+                               {% endif %}">
+                        Inicio
+                    </a>
+
+                    <a href="{% url 'proyectos' %}" class="px-4 py-2 rounded-full transition
+                               {% if request.resolver_match.url_name == 'proyectos' %}
+                                   bg-orange-500 text-neutral-950 font-semibold
+                               {% else %}
+                                   text-neutral-300 hover:text-white hover:bg-neutral-800
+                               {% endif %}">
+                        Cursos
+                    </a>
+
+                    {% if user.is_authenticated %}
+                    <form method="POST" action="{% url 'logout' %}" class="ml-2">
+                        {% csrf_token %}
+                        <button type="submit" class="px-4 py-2 rounded-full border border-neutral-700 text-neutral-300
+                                   hover:border-red-500 hover:text-red-400 transition">
+                            Salir
+                        </button>
+                    </form>
+                    {% endif %}
+
+                </nav>
+            </div>
+
+            {% block volver %}{% endblock %}
+
+            {% block encabezado %}{% endblock %}
+
+        </div>
+    </header>
+
+
+    <!-- CONTENIDO -->
+    <main class="max-w-[var(--ancho)] mx-auto px-6 -mt-8 pb-16">
+
+        {% if messages %}
+        <div class="mb-4 space-y-2">
+            {% for message in messages %}
+            <div class="rounded-xl px-4 py-3 text-sm font-medium shadow-sm
+                {% if message.tags == 'error' %}
+                    bg-red-50 text-red-700 border border-red-200
+                {% elif message.tags == 'success' %}
+                    bg-green-50 text-green-700 border border-green-200
+                {% else %}
+                    bg-orange-50 text-orange-800 border border-orange-200
+                {% endif %}">
+                {{ message }}
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+
+
+
+        {% block contenido %}{% endblock %}
+
+    </main>
+
+    {% endblock body %}
+
+    {% block scripts %}{% endblock %}
+
+</body>
+
+</html>

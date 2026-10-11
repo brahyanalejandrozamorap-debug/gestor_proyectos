@@ -1,0 +1,89 @@
+{% extends 'layouts/base.html' %}
+
+{% block title %}Mis Proyectos{% endblock %}
+
+{% block ancho %}72rem{% endblock %}
+
+{% block encabezado %}
+<div class="mt-10 flex flex-col sm:flex-row sm:items-end sm:justify-between gap-6">
+    <div>
+        <h1 class="text-4xl sm:text-5xl font-extrabold tracking-tight">
+            Mis <span class="text-orange-500">Cursos</span>
+        </h1>
+        <p class="mt-2 text-neutral-400">
+            {{ proyectos|length }} registrado{{ proyectos|length|pluralize }} · Administra todo desde aquí
+        </p>
+    </div>
+
+    <a href="{% url 'nuevo_proyecto' %}" class="inline-flex items-center justify-center gap-2 bg-orange-500 hover:bg-orange-400
+                           text-neutral-950 font-semibold px-5 py-3 rounded-full transition">
+        <span class="text-xl leading-none">+</span> Nuevo curso
+    </a>
+</div>
+{% endblock %}
+
+
+
+{% block contenido %}
+<!-- LISTA (sube sobre el header) -->
+
+
+<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+
+    {% for proyecto in proyectos %}
+
+    <article class="group bg-white rounded-2xl border-t-4 border-orange-500 p-6 flex flex-col
+                            shadow-md transition duration-200 hover:-translate-y-1 hover:shadow-xl">
+
+        <!-- DURACIÓN -->
+        <span class="self-start text-xs font-semibold bg-neutral-900 text-orange-400 px-3 py-1 rounded-full">
+            {{ proyecto.duracion }} meses
+        </span>
+
+        <!-- NOMBRE -->
+        <h2 class="mt-4 text-xl font-bold group-hover:text-orange-600 transition">
+            {{ proyecto.nombre }}
+        </h2>
+
+        <!-- DESCRIPCIÓN -->
+        <p class="mt-2 text-neutral-500 text-sm leading-relaxed min-h-[60px]">
+            {{ proyecto.descripcion }}
+        </p>
+
+        <!-- ACCIONES -->
+        <div class="mt-6 pt-4 border-t border-neutral-100 flex items-center justify-between">
+
+            <a href="{% url 'proyecto_detalle' proyecto.id %}"
+                class="font-semibold text-neutral-900 hover:text-orange-600 transition">
+                Ver detalle →
+            </a>
+
+            <a href="{% url 'eliminar_proyecto' proyecto.id %}"
+                class="text-sm text-neutral-400 hover:text-red-600 transition"
+                onclick="return confirm('¿Estás seguro de que deseas eliminar este proyecto?');">
+                Eliminar
+            </a>
+
+        </div>
+
+    </article>
+
+    {% empty %}
+
+    <!-- SIN PROYECTOS -->
+    <div class="col-span-full bg-white rounded-2xl border-2 border-dashed border-neutral-300 text-center py-16 px-6">
+        <div class="mx-auto w-14 h-14 rounded-full bg-orange-100 text-orange-500
+                            flex items-center justify-center text-3xl font-bold">+</div>
+        <h2 class="mt-4 text-xl font-bold">No hay proyectos registrados</h2>
+        <p class="mt-1 text-neutral-500">Cuando crees un proyecto aparecerá aquí.</p>
+        <a href="{% url 'nuevo_proyecto' %}"
+            class="inline-block mt-6 bg-neutral-950 hover:bg-neutral-800 text-white font-semibold px-5 py-2.5 rounded-full transition">
+            Crear el primero
+        </a>
+    </div>
+
+    {% endfor %}
+
+</div>
+
+{% endblock %}
