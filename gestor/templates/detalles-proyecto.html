@@ -1,3 +1,4 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="es">
 
@@ -5,8 +6,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Detalle del Proyecto</title>
-
+    <title>Detalle del Curso</title>
+    <link rel="icon" href="{% static 'img/favicon.ico' %}" type="image/x-icon">
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;800&display=swap" rel="stylesheet">
     <script>
@@ -35,9 +36,6 @@
             <div class="mt-3 flex flex-wrap items-center gap-2">
                 <span class="text-xs font-semibold bg-orange-500 text-neutral-950 px-3 py-1 rounded-full">
                     Cursos
-                </span>
-                <span class="text-xs font-semibold bg-neutral-800 text-neutral-300 px-3 py-1 rounded-full">
-                    ID: {{ proyecto.id }}
                 </span>
             </div>
 

@@ -1,0 +1,89 @@
+{% extends 'layouts/base.html' %}
+{% block title %}Permisos | Gestor de Proyectos{% endblock %}
+
+{% block ancho %}56rem{% endblock %}
+
+<!-- TÍTULO (header oscuro) -->
+{% block encabezado %}
+<div class="mt-10">
+    <p class="text-xs font-semibold uppercase tracking-widest text-orange-500 mb-2">
+        Administración
+    </p>
+
+    <h1 class="text-3xl font-extrabold tracking-tight text-white">
+        Permisos
+    </h1>
+
+    <p class="text-sm text-neutral-400 mt-2">
+        Seleccioná un grupo y definí qué puede hacer.
+    </p>
+</div>
+{% endblock encabezado %}
+
+{% block contenido %}
+<form action="{% url 'permisos' %}" method="post"
+    class="bg-white border border-neutral-200 rounded-3xl shadow-sm overflow-hidden">
+    {% csrf_token %}
+
+    <!-- Selector de grupo -->
+    <div class="p-6 border-b border-neutral-100">
+        <div class="flex items-center gap-3 mb-4">
+            <div class="w-10 h-10 rounded-xl bg-neutral-950 flex items-center justify-center">
+                <i class="fa-solid fa-users text-orange-500"></i>
+            </div>
+            <div>
+                <label for="grupo" class="block text-sm font-bold text-neutral-950">Grupo</label>
+                <p class="text-xs text-neutral-500">Elegí el equipo al que le vas a asignar permisos.</p>
+            </div>
+        </div>
+
+        <select name="grupo" id="grupo" onchange="window.location.href='?grupo=' + this.value;" class="w-full sm:w-80 rounded-full border border-neutral-200 bg-neutral-50 px-5 py-3 text-sm text-neutral-900 outline-none transition
+                   focus:border-orange-500 focus:bg-white focus:ring-4 focus:ring-orange-100">
+            {% for grupo_opcion in grupos %}
+            <option value="{{ grupo_opcion.id }}" {% if grupo_opcion.id == grupo.id %}selected{% endif %}>
+                {{ grupo_opcion.name }}
+            </option>
+            {% endfor %}
+        </select>
+    </div>
+
+    <!-- Lista de permisos -->
+    <div class="p-6">
+        <div class="flex items-center justify-between mb-4">
+            <h2 class="text-sm font-bold text-neutral-950">Permisos disponibles</h2>
+            <span
+                class="inline-flex items-center gap-2 rounded-full bg-neutral-950 px-3 py-1.5 text-xs font-bold text-orange-500">
+                <i class="fa-solid fa-key"></i>
+                {{ permisos|length }}
+            </span>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+            {% for permiso in permisos %}
+            <label class="flex items-start gap-3 p-4 rounded-2xl border border-neutral-200 cursor-pointer
+                          hover:border-orange-300 hover:bg-orange-50/50 transition
+                          has-[:checked]:border-orange-500 has-[:checked]:bg-orange-50">
+                <input type="checkbox" name="permisos" value="{{ permiso.id }}" 
+                {% if permiso.id in permisos_grupo %}checked{% endif %}
+                    class="mt-0.5 h-4 w-4 rounded border-neutral-300 accent-orange-500 text-orange-500 focus:ring-orange-400">
+                <span class="text-sm min-w-0">
+                    <span class="block font-semibold text-neutral-900">{{ permiso.name }}</span>
+                    <span class="block text-xs text-neutral-500 font-mono truncate">{{ permiso.codename }}</span>
+                </span>
+            </label>
+            {% endfor %}
+        </div>
+    </div>
+
+    {% if grupo %}
+    <div class="px-6 py-4 bg-neutral-50 border-t border-neutral-100 flex justify-end">
+        <button type="submit"
+            class="inline-flex items-center justify-center gap-2 rounded-full bg-orange-500 px-6 py-3 text-sm font-bold text-neutral-950
+                   transition hover:bg-neutral-950 hover:text-orange-500 focus:outline-none focus:ring-4 focus:ring-orange-200">
+            <i class="fa-solid fa-floppy-disk"></i>
+            Guardar permisos
+        </button>
+    </div>
+    {% endif %}
+</form>
+{% endblock contenido %}

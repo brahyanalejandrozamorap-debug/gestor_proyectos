@@ -5,19 +5,19 @@
 
 <a href="{% url 'proyectos' %}" class="flex items-center gap-2 text-sm font-semibold tracking-wide">
     <span class="w-3 h-3 rounded-full bg-orange-500"></span>
-    GESTOR DE PROYECTOS
+    GESTOR DE CURSOS
 </a>
 
 {% block volver %}
 <a href="{% url 'proyecto_detalle' proyecto.id %}"
     class="inline-block mt-8 text-sm text-neutral-400 hover:text-orange-400 transition">
-    ← Volver al proyecto
+    ← Volver al Cursos
 </a>
 {% endblock %}
 
 {% block encabezado %}
 <h1 class="mt-3 text-4xl sm:text-5xl font-extrabold tracking-tight">
-    Editar <span class="text-orange-500">proyecto</span>
+    Editar <span class="text-orange-500">Curso</span>
 </h1>
 
 <p class="mt-2 text-neutral-400">
@@ -35,15 +35,6 @@
     <form method="POST" class="space-y-6">
 
         {% csrf_token %}
-
-        <!-- ID -->
-        <div>
-            <label class="block text-sm font-semibold text-neutral-700 mb-1.5">
-                ID del proyecto
-            </label>
-            <input type="text" value="{{ proyecto.id }}" disabled class="w-full rounded-xl border border-neutral-200 bg-neutral-100 text-neutral-500
-                                px-4 py-3 cursor-not-allowed">
-        </div>
 
         <!-- Nombre -->
         <div>

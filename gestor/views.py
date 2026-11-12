@@ -3,6 +3,7 @@ from django.http import HttpResponse
 from django.views.decorators.http import require_POST
 from django.contrib.auth.decorators import login_required
 from .models import Proyecto, Tarea
+from accounts.views import es_admin
 
 @login_required
 def hello(request):
@@ -14,9 +15,13 @@ def acerca_de(request):
 
 @login_required
 def proyectos(request):
+  
+  if es_admin(request.user):
     proyectos = Proyecto.objects.all()
+  else:
+    proyectos = Proyecto.objects.filter(usuario=request.user)
 
-    return render(request, 'proyectos.html', {
+  return render(request, 'proyectos.html', {
         'proyectos': proyectos
     })
 
@@ -24,6 +29,7 @@ def proyecto_detalle(request, proyecto_id):
   proyecto = Proyecto.objects.get(id=proyecto_id)
   return render(request, 'detalles-proyecto.html', {'proyecto': proyecto})
 
+@login_required
 def nuevo_proyecto(request):
   if request.method == "POST":
     nombre = request.POST.get('nombre')
@@ -32,6 +38,7 @@ def nuevo_proyecto(request):
 
     if nombre and descripcion and duracion:
       proyecto = Proyecto(
+        usuario=request.user,
         nombre=nombre,
         descripcion=descripcion,
         duracion=duracion

@@ -1,3 +1,4 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="es">
 
@@ -6,6 +7,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <title>Iniciar sesión</title>
+
+    <link rel="icon" href="{% static 'img/favicon.ico' %}" type="image/x-icon">
 
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;800&display=swap" rel="stylesheet">
@@ -26,6 +29,11 @@
 
                 <!-- Título -->
                 <div class="text-center mb-8">
+                    <div
+                        class="w-16 h-16 bg-neutral-950 rounded-2xl flex items-center justify-center mx-auto mb-4 overflow-hidden ring-4 ring-orange-500">
+                        <img src="{% static 'img/logo.png' %}" alt="Logo" class="w-full h-full object-cover">
+                    </div>
+
                     <h1 class="text-3xl font-extrabold tracking-tight text-neutral-900">
                         Iniciar <span class="text-orange-500">sesión</span>
                     </h1>
@@ -71,7 +79,8 @@
                 <!-- Registro -->
                 <p class="text-center text-neutral-500 text-sm mt-8">
                     ¿No tienes una cuenta?
-                    <a href="#" class="font-semibold text-neutral-900 hover:text-orange-600 transition">
+                    <a href="{% url 'registro' %}"
+                        class="font-semibold text-neutral-900 hover:text-orange-600 transition">
                         Crear cuenta
                     </a>
                 </p>

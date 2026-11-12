@@ -1,0 +1,174 @@
+{% extends 'layouts/base.html' %}
+
+{% block title %}Grupos | Gestor de Cursos{% endblock %}
+
+{% block ancho %}48rem{% endblock %}
+
+<!-- TÍTULO DENTRO DEL HEADER OSCURO -->
+{% block encabezado %}
+<div class="mt-10">
+    <p class="text-xs font-semibold uppercase tracking-widest text-orange-500 mb-2">
+        Administración
+    </p>
+
+    <h1 class="text-3xl font-extrabold tracking-tight text-white">
+        Grupos
+    </h1>
+
+    <p class="text-sm text-neutral-400 mt-2">
+        Organiza los usuarios del sistema por equipos.
+    </p>
+</div>
+{% endblock encabezado %}
+
+{% block contenido %}
+
+<div class="space-y-5">
+
+    <!-- CREAR GRUPO -->
+    <div class="bg-white rounded-3xl border border-neutral-200 shadow-sm p-6">
+
+        <div class="flex items-center gap-3 mb-5">
+            <div>
+                <h2 class="text-sm font-bold text-neutral-950">
+                    Crear nuevo grupo
+                </h2>
+                <p class="text-xs text-neutral-500">
+                    Registra un nuevo equipo de trabajo.
+                </p>
+            </div>
+        </div>
+
+        <form method="POST" class="space-y-3">
+            {% csrf_token %}
+
+            <label for="nombre_grupo" class="block text-xs font-semibold text-neutral-700">
+                Nombre del grupo
+            </label>
+
+            <div class="flex flex-col sm:flex-row gap-2">
+
+                <input type="text" id="nombre_grupo" name="nombre_grupo" maxlength="150" required
+                    placeholder="Ej. Desarrollo, Diseño, Administración..."
+                    class="flex-1 min-w-0 rounded-full border border-neutral-200 bg-neutral-50 px-5 py-3 text-sm text-neutral-900 outline-none transition placeholder:text-neutral-400 focus:border-orange-500 focus:bg-white focus:ring-4 focus:ring-orange-100">
+
+                <button type="submit"
+                    class="inline-flex items-center justify-center gap-2 rounded-full bg-orange-500 px-6 py-3 text-sm font-bold text-neutral-950 transition hover:bg-neutral-950 hover:text-orange-500 focus:outline-none focus:ring-4 focus:ring-orange-200">
+
+                    <i class="fa-solid fa-plus"></i>
+                    Agregar grupo
+                </button>
+
+            </div>
+        </form>
+    </div>
+
+    <!-- LISTADO -->
+    <div class="bg-white rounded-3xl border border-neutral-200 shadow-sm overflow-hidden">
+
+        <div class="px-6 py-4 border-b border-neutral-100 flex items-center justify-between">
+
+            <div>
+                <h2 class="text-sm font-bold text-neutral-950">
+                    Grupos registrados
+                </h2>
+
+                <p class="text-xs text-neutral-500 mt-1">
+                {{ grupos|length }} grupo{{ grupos|length|pluralize }} disponible{{ grupos|length|pluralize }}
+                </p>
+            </div>
+
+            <span
+                class="inline-flex items-center gap-2 rounded-full bg-neutral-950 px-3 py-1.5 text-xs font-bold text-orange-500">
+                <i class="fa-solid fa-layer-group"></i>
+                {{ grupos|length }}
+            </span>
+
+        </div>
+
+        {% if grupos %}
+
+        <div class="divide-y divide-neutral-100">
+
+            {% for grupo in grupos %}
+
+            <div
+                class="px-6 py-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 hover:bg-orange-50/50 transition">
+
+                <!-- INFORMACIÓN -->
+                <div class="flex items-center gap-3 min-w-0">
+
+                    <div class="min-w-0">
+                        <h3 class="text-sm font-semibold text-neutral-950 truncate">
+                            {{ grupo.name }}
+                        </h3>
+
+                        <p class="text-xs mt-1">
+                            <span
+                                class="inline-flex items-center rounded-full bg-orange-100 px-2 py-0.5 font-semibold text-orange-700">
+                                {{ grupo.user_set.count }}
+                                usuario{{ grupo.user_set.count|pluralize }}
+                            </span>
+                        </p>
+                    </div>
+
+                </div>
+
+                <!-- BOTONES -->
+                <div class="flex items-center gap-2">
+
+                    <a href="{% url 'editar_grupo' grupo.id %}"
+                        class="flex-1 sm:flex-none inline-flex items-center justify-center gap-2 rounded-full border border-neutral-300 px-4 py-2 text-xs font-bold text-neutral-800 hover:bg-neutral-950 hover:text-orange-500 hover:border-neutral-950 transition">
+
+                        <i class="fa-solid fa-pen"></i>
+                        Editar
+                    </a>
+
+                    <form method="POST" action="{% url 'eliminar_grupo' grupo.id %}"
+                        onsubmit="return confirm('¿Seguro que deseas eliminar este grupo?');">
+
+                        {% csrf_token %}
+
+                        <button type="submit"
+                            class="inline-flex items-center justify-center gap-2 rounded-full border border-red-200 px-4 py-2 text-xs font-bold text-red-600 hover:bg-red-600 hover:text-white hover:border-red-600 transition">
+
+                            <i class="fa-solid fa-trash"></i>
+                            Eliminar
+                        </button>
+
+                    </form>
+
+                </div>
+
+            </div>
+
+            {% endfor %}
+
+        </div>
+
+        {% else %}
+
+        <!-- ESTADO VACÍO -->
+        <div class="px-6 py-14 text-center">
+
+            <div class="w-14 h-14 mx-auto rounded-2xl bg-neutral-950 flex items-center justify-center mb-4">
+                <i class="fa-solid fa-users-slash text-xl text-orange-500"></i>
+            </div>
+
+            <h3 class="text-sm font-semibold text-neutral-900">
+                No hay grupos registrados
+            </h3>
+
+            <p class="text-xs text-neutral-500 mt-1">
+                Utiliza el formulario superior para crear tu primer grupo.
+            </p>
+
+        </div>
+
+        {% endif %}
+
+    </div>
+
+</div>
+
+{% endblock contenido %}

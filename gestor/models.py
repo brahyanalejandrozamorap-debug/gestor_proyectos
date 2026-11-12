@@ -1,6 +1,12 @@
 from django.db import models
+from django.contrib.auth.models import User
 
 class Proyecto(models.Model):
+    usuario = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        related_name='proyectos'
+    )
     nombre = models.CharField(max_length=200)
     descripcion = models.TextField()
     duracion = models.CharField(max_length=100)
